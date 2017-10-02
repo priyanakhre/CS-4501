@@ -1,14 +1,18 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
+from youbet import models
+from .models import User, Bet, Response
 
-from .models import User
-from .models import Bet
-from .models import Response
+from datetime import datetime
+
+
 
 def api_response(success, payload):
     return JsonResponse({'success': success, 'data': payload})
 
+
+#Create a user oor get all users
 @csrf_exempt
 def user_Create_GetAll(request):
     if request.method == 'POST':
@@ -18,7 +22,8 @@ def user_Create_GetAll(request):
             username=request.POST["username"],
             password=request.POST["password"],
             num_tokens=request.POST["num_tokens"],
-            num_flags=request.POST["num_flags"]
+            num_flags=request.POST["num_flags"],
+            joined_date=request.POST["joined_date"]
         )
         try:
             user.save()
@@ -32,6 +37,7 @@ def user_Create_GetAll(request):
     else:
         return api_response(False, "Unable to process HTTP Request")        
 
+#create a bet or get all bets
 @csrf_exempt
 def bet_Create_GetAll(request):
     if request.method == 'POST':
@@ -41,7 +47,9 @@ def bet_Create_GetAll(request):
             question=request.POST["question"],
             description=request.POST["description"],
             min_buyin=request.POST["min_buyin"],
-            per_person_cap=request.POST["per_person_cap"]
+            per_person_cap=request.POST["per_person_cap"],
+            initiation=request.POST["initiatioin"]
+
         )
         try:
             bet.save()
@@ -55,6 +63,7 @@ def bet_Create_GetAll(request):
     else:
         return api_response(False, "Unable to process HTTP Request")
 
+#create A response or get all responses
 @csrf_exempt
 def response_Create_GetAll(request):
     if request.method == 'POST':
@@ -97,6 +106,7 @@ def user_get_update_delete(request, user_id):
     else:
         return api_response(False, "Unable to process HTTP Request")
 
+#Get a bet, update a bet, delete a bet
 @csrf_exempt
 def bet_get_update_delete(request, bet_id):
     try:
@@ -118,6 +128,7 @@ def bet_get_update_delete(request, bet_id):
     else:
         return api_response(False, "Unable to process HTTP Request")
 
+#Get, update or delete a bet
 @csrf_exempt
 def response_get_update_delete(request, response_id):
     try:

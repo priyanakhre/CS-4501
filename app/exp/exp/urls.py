@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from . import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^api/index/$', views.index, name='index'),
+    # Bets
+
+    #url(r'^api/bets/$', views.get_all_bets, name='get_all_bets'),
+    url(r'^api/bet/(?P<id>[0-9]+)/$', views.get_bet, name='get_bet'),
+    #url(r'^api/bets/recently_posted/$', views.get_recently_posted_bets, name='get_recently_posted_bets'),
 ]

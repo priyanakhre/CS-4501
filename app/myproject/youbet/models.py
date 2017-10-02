@@ -1,4 +1,7 @@
 from django.db import models
+from datetime import datetime
+
+#ASK ABOUT ADDING DATE FIELDS!!!!!!!!
 
 class User(models.Model):
     first_name = models.CharField(max_length=50)
@@ -7,6 +10,10 @@ class User(models.Model):
     password = models.CharField(max_length=50)
     num_tokens = models.IntegerField()
     num_flags = models.IntegerField()
+    joined_date = models.DateField(default=datetime.now, blank=True)
+
+    def __str__(self):
+    	return self.username
 
     def as_json(self):
         return dict(
@@ -27,7 +34,7 @@ class Bet(models.Model):
     outcome = models.NullBooleanField(blank=True, null=True)
     min_buyin = models.IntegerField()
     per_person_cap = models.IntegerField()
-    #initiation = models.DateTimeField(auto_now=True)
+    initiation = models.DateField(default=datetime.now, blank=True)
     #expiration = models.DateTimeField(auto_now=True)
 
     def as_json(self):
@@ -40,7 +47,7 @@ class Bet(models.Model):
             outcome = self.outcome,
             min_buyin = self.min_buyin,
             per_person_cap = self.per_person_cap,
-            #initiation = self.initiation,
+            initiation = self.initiation,
             #expiration = self.expiration
         )
 
@@ -49,7 +56,7 @@ class Response(models.Model):
     bet_id = models.IntegerField()
     answer = models.BooleanField()
     amount = models.IntegerField()
-    #resp_timestamp = models.DateTimeField(auto_now=True)
+    #resp_timestamp = models.DateTimeField(auto_now_add=True)
     
     def as_json(self):
         return dict(
